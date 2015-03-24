@@ -71,17 +71,30 @@ public final class CachePartitionSegment {
         return recordStores.get(name);
     }
 
-    public void deleteRecordStore(String name) {
+    public void deleteRecordStore(String name, boolean destroy) {
         ICacheRecordStore store = recordStores.remove(name);
-        if (store != null) {
-            store.destroy();
+        if (store == null) {
+            return;
         }
+        if (destroy) {
+            store.destroy();
+        } else {
+            store.close();
+        }
+    }
+
+    public boolean hasAnyRecordStore() {
+        return !recordStores.isEmpty();
+    }
+
+    public boolean hasRecordStore(String name) {
+        return recordStores.containsKey(name);
     }
 
     public void clear() {
         synchronized (mutex) {
             for (ICacheRecordStore store : recordStores.values()) {
-                store.destroy();
+                store.clear();
             }
         }
         recordStores.clear();
@@ -91,11 +104,12 @@ public final class CachePartitionSegment {
         clear();
     }
 
-    public boolean hasAnyRecordStore() {
-        return !recordStores.isEmpty();
-    }
-
-    public boolean hasRecordStore(String name) {
-        return recordStores.containsKey(name);
+    public void close() {
+        synchronized (mutex) {
+            for (ICacheRecordStore store : recordStores.values()) {
+                store.close();
+            }
+        }
+        recordStores.clear();
     }
 }

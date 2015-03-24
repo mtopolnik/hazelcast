@@ -862,7 +862,7 @@ public abstract class AbstractCacheRecordStore<R extends CacheRecord, CRM extend
         doPutRecord(key, (R) record);
     }
 
-    protected final R doPutRecord(Data key, R record) {
+    public final R doPutRecord(Data key, R record) {
         return doPutRecord(key, record, SOURCE_NOT_AVAILABLE);
     }
 
@@ -1469,6 +1469,12 @@ public abstract class AbstractCacheRecordStore<R extends CacheRecord, CRM extend
 
     protected void onClear() {
         invalidateAllEntries();
+    }
+
+    @Override
+    public void close() {
+        records.close();
+        closeListeners();
     }
 
     @Override

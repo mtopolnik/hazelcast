@@ -157,5 +157,4 @@ public class CacheRecordStore
             return serializationService.toData(obj);
         }
     }
-
 }

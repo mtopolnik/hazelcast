@@ -141,15 +141,24 @@ public abstract class AbstractCacheService
 
     protected void destroySegments(String name) {
         for (CachePartitionSegment segment : segments) {
-            segment.deleteRecordStore(name);
+            segment.deleteRecordStore(name, true);
+        }
+    }
+
+    protected void closeSegments(String name) {
+        for (CachePartitionSegment segment : segments) {
+            segment.deleteRecordStore(name, false);
         }
     }
 
     @Override
-    public void destroyCache(String name, boolean isLocal, String callerUuid) {
+    public void deleteCache(String name, boolean isLocal, String callerUuid, boolean destroy) {
         CacheConfig config = deleteCacheConfig(name);
-        destroySegments(name);
-
+        if (destroy) {
+            destroySegments(name);
+        } else {
+            closeSegments(name);
+        }
         if (!isLocal) {
             deregisterAllListener(name);
             cacheContexts.remove(name);

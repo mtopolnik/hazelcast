@@ -115,6 +115,8 @@ public interface OperationExecutor {
      */
     void runOnCallingThreadIfPossible(Operation op);
 
+    void runOnAllPartitionThreads(Runnable task);
+
     /**
      * Checks if the operation is allowed to run on the current thread.
      *

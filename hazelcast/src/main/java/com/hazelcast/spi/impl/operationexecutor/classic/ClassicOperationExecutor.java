@@ -32,6 +32,7 @@ import com.hazelcast.spi.impl.operationexecutor.OperationRunner;
 import com.hazelcast.spi.impl.operationexecutor.OperationRunnerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static com.hazelcast.util.Preconditions.checkNotNull;
@@ -333,6 +334,12 @@ public final class ClassicOperationExecutor implements OperationExecutor {
             runOnCallingThread(op);
         } else {
             execute(op);
+        }
+    }
+
+    @Override public void runOnAllPartitionThreads(Runnable task) {
+        for (OperationThread partitionOperationThread : partitionOperationThreads) {
+            partitionOperationThread.scheduleQueue.addUrgent(task);
         }
     }
 

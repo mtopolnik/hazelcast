@@ -55,7 +55,7 @@ public interface ICacheService extends ManagedService, RemoteService, MigrationA
 
     CacheStatisticsImpl createCacheStatIfAbsent(String name);
 
-    void destroyCache(String objectName, boolean isLocal, String callerUuid);
+    void deleteCache(String objectName, boolean isLocal, String callerUuid, boolean destroy);
 
     void deleteCacheStat(String name);
 

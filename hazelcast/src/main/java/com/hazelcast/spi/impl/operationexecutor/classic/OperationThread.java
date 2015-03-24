@@ -125,23 +125,17 @@ public abstract class OperationThread extends HazelcastManagedThread {
 
     private void process(Object task) {
         processedTotalCount.inc();
-
         if (task instanceof Operation) {
             processOperation((Operation) task);
-            return;
-        }
-
-        if (task instanceof Packet) {
+        } else if (task instanceof Packet) {
             processPacket((Packet) task);
-            return;
-        }
-
-        if (task instanceof PartitionSpecificRunnable) {
+        } else if (task instanceof PartitionSpecificRunnable) {
             processPartitionSpecificRunnable((PartitionSpecificRunnable) task);
-            return;
+        } else if (task instanceof Runnable) {
+            ((Runnable)task).run();
+        } else {
+            throw new IllegalStateException("Unhandled task type for task:" + task);
         }
-
-        throw new IllegalStateException("Unhandled task type for task:" + task);
     }
 
     private void processPartitionSpecificRunnable(PartitionSpecificRunnable runnable) {

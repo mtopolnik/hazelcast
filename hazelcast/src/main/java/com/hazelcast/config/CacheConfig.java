@@ -86,6 +86,7 @@ public class CacheConfig<K, V>
             this.asyncBackupCount = config.asyncBackupCount;
             this.backupCount = config.backupCount;
             this.inMemoryFormat = config.inMemoryFormat;
+            this.isHotRestart = config.isHotRestart;
             // Eviction config cannot be null
             if (config.evictionConfig != null) {
                 this.evictionConfig = new CacheEvictionConfig(config.evictionConfig);
@@ -514,6 +515,7 @@ public class CacheConfig<K, V>
                 + ", managerPrefix='" + managerPrefix + '\''
                 + ", inMemoryFormat=" + inMemoryFormat
                 + ", backupCount=" + backupCount
+                + ", hotRestart=" + isHotRestart()
                 + '}';
     }
 }

@@ -99,13 +99,7 @@ public class CacheService extends AbstractCacheService {
     @Override
     public void reset() {
         for (String objectName : configs.keySet()) {
-            destroyCache(objectName, true, null);
-        }
-        final CachePartitionSegment[] partitionSegments = segments;
-        for (CachePartitionSegment partitionSegment : partitionSegments) {
-            if (partitionSegment != null) {
-                partitionSegment.clear();
-            }
+            deleteCache(objectName, true, null, false);
         }
     }
 

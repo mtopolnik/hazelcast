@@ -867,11 +867,16 @@ public abstract class AbstractCacheRecordStore<R extends CacheRecord, CRM extend
     }
 
     protected final R doPutRecord(Data key, R record, String source) {
+        key = preProcessKey(key);
         R oldRecord = records.put(key, record);
         if (oldRecord != null) {
             invalidateEntry(key, source);
         }
         return oldRecord;
+    }
+
+    protected Data preProcessKey(Data key) {
+        return key;
     }
 
     @Override

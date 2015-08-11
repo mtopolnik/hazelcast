@@ -43,8 +43,7 @@ import java.util.Set;
  */
 public interface ICacheRecordStore {
 
-    // Defined as constant for check-style error
-    int ONE_HUNDRED_PERCENT = 100;
+    int UNIT_PERCENTAGE = 100;
 
     /**
      * Gets the value to which the specified key is mapped,

@@ -72,8 +72,12 @@ public class CacheService extends AbstractCacheService {
             new ConcurrentHashMap<String, InvalidationEventQueue>();
     protected ScheduledFuture cacheBatchInvalidationMessageSenderScheduler;
 
+    @Override protected CachePartitionSegment newPartitionSegment(int partitionId) {
+        return new CachePartitionSegment(this, partitionId);
+    }
+
     protected ICacheRecordStore createNewRecordStore(String name, int partitionId) {
-        return new CacheRecordStore(name, partitionId, nodeEngine, CacheService.this);
+        return new CacheRecordStore(name, partitionId, nodeEngine, this);
     }
 
     @Override

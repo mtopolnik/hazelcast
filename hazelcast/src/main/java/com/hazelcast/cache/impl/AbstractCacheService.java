@@ -83,12 +83,14 @@ public abstract class AbstractCacheService
         int partitionCount = nodeEngine.getPartitionService().getPartitionCount();
         segments = new CachePartitionSegment[partitionCount];
         for (int i = 0; i < partitionCount; i++) {
-            segments[i] = new CachePartitionSegment(this, i);
+            segments[i] = newPartitionSegment(i);
         }
         postInit(nodeEngine, properties);
     }
 
-    protected void postInit(NodeEngine nodeEngine, Properties properties) { };
+    protected void postInit(NodeEngine nodeEngine, Properties properties) { }
+
+    protected abstract CachePartitionSegment newPartitionSegment(int partitionId);
 
     protected abstract ICacheRecordStore createNewRecordStore(String name, int partitionId);
 

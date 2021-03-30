@@ -45,6 +45,16 @@ public interface MemoryAllocator extends Disposable {
     long allocate(long size);
 
     /**
+     * Resolves the indirect pointer to the direct pointer. Some allocators may
+     * move the memory blocks in order to compact free, so the direct pointer
+     * may change. You must resolve the indirect pointer you got from {@link
+     * #allocate(long)} before you dereference it.
+     */
+    default long toDirectPointer(long indirectPointer) {
+        return indirectPointer;
+    }
+
+    /**
      * Accepts the base address and size of a previously allocated block and "reallocates" it by either:
      * <ol><li>
      *     Resizing the existing block, if possible. The contents of the block remain unchanged up to the

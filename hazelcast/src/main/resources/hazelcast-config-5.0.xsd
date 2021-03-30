@@ -3200,6 +3200,7 @@
         <xs:restriction base="non-space-string">
             <xs:enumeration value="STANDARD"/>
             <xs:enumeration value="POOLED"/>
+            <xs:enumeration value="COMPACTING"/>
         </xs:restriction>
     </xs:simpleType>
 

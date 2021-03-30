@@ -70,6 +70,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
+import static com.hazelcast.config.NativeMemoryConfig.MemoryAllocatorType.COMPACTING;
 import static com.hazelcast.config.NativeMemoryConfig.MemoryAllocatorType.POOLED;
 import static com.hazelcast.core.EntryEventType.ADDED;
 import static com.hazelcast.core.EntryEventType.LOADED;
@@ -1399,7 +1400,7 @@ public class DefaultRecordStore extends AbstractEvictableRecordStore {
         mapDataStore.reset();
 
         if (onShutdown) {
-            if (hasPooledMemoryAllocator()) {
+            if (hasPooledMemoryAllocator() || hasCompactingMemoryAllocator()) {
                 destroyStorageImmediate(true, true);
             } else {
                 destroyStorageAfterClear(true, true);
@@ -1414,9 +1415,17 @@ public class DefaultRecordStore extends AbstractEvictableRecordStore {
     }
 
     private boolean hasPooledMemoryAllocator() {
+        return hasMemoryAllocatorOfType(POOLED);
+    }
+
+    private boolean hasCompactingMemoryAllocator() {
+        return hasMemoryAllocatorOfType(COMPACTING);
+    }
+
+    private boolean hasMemoryAllocatorOfType(NativeMemoryConfig.MemoryAllocatorType type) {
         NodeEngine nodeEngine = mapServiceContext.getNodeEngine();
         NativeMemoryConfig nativeMemoryConfig = nodeEngine.getConfig().getNativeMemoryConfig();
-        return nativeMemoryConfig != null && nativeMemoryConfig.getAllocatorType() == POOLED;
+        return nativeMemoryConfig != null && nativeMemoryConfig.getAllocatorType() == type;
     }
 
     private void destroyStorageImmediate(boolean isDuringShutdown, boolean internal) {

@@ -29,6 +29,8 @@ import com.hazelcast.config.security.LdapAuthenticationConfig;
 import com.hazelcast.config.security.RealmConfig;
 import com.hazelcast.instance.EndpointQualifier;
 import com.hazelcast.internal.nio.IOUtil;
+import com.hazelcast.memory.MemorySize;
+import com.hazelcast.memory.MemoryUnit;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionOn;
 import com.hazelcast.splitbrainprotection.impl.ProbabilisticSplitBrainProtectionFunction;
 import com.hazelcast.splitbrainprotection.impl.RecentlyActiveSplitBrainProtectionFunction;
@@ -3449,6 +3451,21 @@ public class XMLConfigBuilderTest extends AbstractConfigBuilderTest {
                 + "<split-brain-protection enabled='true' name='q'><protect-on> \n WRITE \n </protect-on></split-brain-protection>"
                 + HAZELCAST_END_TAG;
         buildConfig(xml);
+    }
+
+    @Test
+    public void testCompactingNativeMemoryConfig() {
+        String xml = HAZELCAST_START_TAG
+                + "<native-memory allocator-type=\"COMPACTING\">\n"
+                + "  <size value=\"1\" unit=\"GIGABYTES\"/>\n"
+                + "</native-memory>\n"
+                + HAZELCAST_END_TAG;
+
+        Config xmlConfig = new InMemoryXmlConfig(xml);
+
+        NativeMemoryConfig memoryConfig = xmlConfig.getNativeMemoryConfig();
+        assertEquals(NativeMemoryConfig.MemoryAllocatorType.COMPACTING, memoryConfig.getAllocatorType());
+        assertEquals(MemorySize.parse("1", MemoryUnit.GIGABYTES), memoryConfig.getSize());
     }
 
     @Override

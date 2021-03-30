@@ -315,6 +315,9 @@ public class NativeMemoryConfig {
          */
         POOLED,
 
+        /**
+         * COMPACTING memory allocator: compacts free memory by moving allocated blocks
+         */
         COMPACTING
     }
 

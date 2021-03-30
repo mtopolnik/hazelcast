@@ -117,6 +117,8 @@ public class MapContainer {
 
     private volatile boolean destroyed;
 
+    private final Config config;
+
     /**
      * Operations which are done in this constructor should obey the rules defined
      * in the method comment {@link PostJoinAwareService#getPostJoinOperation()}
@@ -125,6 +127,7 @@ public class MapContainer {
     @SuppressWarnings("checkstyle:executablestatementcount")
     public MapContainer(final String name, final Config config, final MapServiceContext mapServiceContext) {
         this.name = name;
+        this.config = config;
         this.mapConfig = config.findMapConfig(name);
         this.eventJournalConfig = mapConfig.getEventJournalConfig();
         this.mapServiceContext = mapServiceContext;
@@ -148,6 +151,10 @@ public class MapContainer {
     public void init() {
         initEvictor();
         mapStoreContext.start();
+    }
+
+    public Config getConfig() {
+        return config;
     }
 
     /**

@@ -43,7 +43,6 @@ import static java.util.Objects.requireNonNull;
  * {@link InMemoryFormat#NATIVE}.
  */
 public class NativeMemoryConfig {
-
     /**
      * Default minimum block size in bytes
      */
@@ -313,7 +312,12 @@ public class NativeMemoryConfig {
         /**
          * POOLED memory allocator: manage memory blocks in pool
          */
-        POOLED
+        POOLED,
+
+        /**
+         * Project X 2021-03 memory allocator
+         */
+        COMPACTING
     }
 
     @Override
